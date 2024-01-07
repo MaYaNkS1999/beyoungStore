@@ -3,8 +3,13 @@ import { baseUrl } from "../utils/constant";
 import loginBanner from "../assets/login-banner.jpg";
 import { TextField } from "@mui/material";
 import { Navigate, useNavigate } from "react-router-dom";
-import {toast,ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addUserDetails } from "../utils/redux/userSlice";
+import { setIsLogin,setIsLoginPopup,setIsSignupPopup,setToken } from "../utils/redux/authSlice";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const Login = () => {
   const [passwordError, setPasswordError] = useState(false);
@@ -14,7 +19,8 @@ const Login = () => {
     password: "",
     appType: "ecommerce",
   });
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,12 +61,33 @@ const Login = () => {
     if (response.ok) {
       // Navigate to a different route
       toast.success("Login Successfully");
-      navigate('/', { replace: true });
+      dispatch(setIsLogin(true));
+      dispatch(setIsLoginPopup(false));
+      // dispatch(setIsSignupPopup)
+      dispatch(addUserDetails(jsonData.data));
+      dispatch(setToken(jsonData.token));
+      navigate("/", { replace: true });
+    } else {
+      toast.error(jsonData.message);
     }
   };
 
+  useEffect(() => {
+    // Save the current scroll position
+    const scrollY = window.scrollY;
+    
+    // Lock the scroll by setting the body overflow to hidden
+    document.body.style.overflow = 'hidden';
+
+    // Restore the scroll position on component unmount
+    return () => {
+      document.body.style.overflow = 'auto';
+      window.scrollTo(0, scrollY);
+    };
+  }, [])
+
   return (
-    <div className="h-full w-full  bg-black bg-opacity-90 absolute z-20">
+    <div className="h-full w-full  bg-black bg-opacity-90 absolute z-20 ">
       <div className="h-auto w-[350px] mx-auto bg-white text-center z-20 border border-black relative top-8 rounded-xl">
         <img src={loginBanner} alt="login-banner" className="w-full p-1" />
         <div className="text-black">
@@ -105,7 +132,8 @@ const Login = () => {
           </button>
         </form>
       </div>
-      <ToastContainer position="bottom-right"
+      <ToastContainer
+        position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -113,7 +141,8 @@ const Login = () => {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover/>
+        pauseOnHover
+      />
     </div>
   );
 };

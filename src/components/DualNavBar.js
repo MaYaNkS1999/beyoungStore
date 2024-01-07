@@ -7,22 +7,30 @@ import logoSVG from "../assets/Logo.svg";
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setIsLogin,setIsSignOut, setIsLoginPopup,setIsSignupPopup } from "../utils/redux/authSlice";
+import { baseUrl } from "../utils/constant";
+import { setIsWishList,setIsOrder,setIsProfile } from "../utils/redux/accountSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DualNavBar = () => {
-  const baseDomain = "https://academics.newtonschool.co/";
   const [dropData, setDropData] = useState([]);
   const [isDropMenuVisible, setIsDropMenuVisible] = useState(false);
   const [searchClick, setSearchClick] = useState(false);
-  const [isLoginClick,setIsLoginClick]=useState(false);
-  const [isSignupClick,setIsSignupClick]=useState(false);
+  
+  const {isLoginPopup,isSignupPopup}= useSelector((store)=>store.auth);
+  const dispatch=useDispatch();
+  const isLogin=useSelector((store)=>store.auth.isLogin);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const url = baseDomain + "api/v1/ecommerce/clothes/categories";
-    const response = await fetch(url, {
+    const apiUrl = baseUrl + "/api/v1/ecommerce/clothes/categories";
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
         projectId: "fio1831j50s3",
@@ -38,17 +46,40 @@ const DualNavBar = () => {
   };
 
   const handleLoginClick=()=>{
-    setIsLoginClick(!isLoginClick);
-    setIsSignupClick(false);
+    // setIsLoginClick(!isLoginClick);
+    dispatch(setIsLoginPopup(!isLoginPopup));
+    dispatch(setIsSignupPopup(false));
+    // setIsSignupClick(false);
   }
 
   const handleSignupClick= ()=>{
-    setIsSignupClick(!isSignupClick);
-    setIsLoginClick(false);
+    // setIsSignupClick(!isSignupClick);
+    dispatch(setIsSignupPopup(!isSignupPopup));
+    dispatch(setIsLoginPopup(false));
+    // setIsLoginClick(false);
   }
 
-  
+  const handleLogout=()=>{
+    dispatch(setIsSignOut(false));
+  }
 
+  const handleWishListClick =()=>{ 
+    if(!isLogin){
+      dispatch(setIsLoginPopup(true));
+      toast.error("Please Log In");
+    }else{
+      dispatch(setIsProfile(false));
+      dispatch(setIsOrder(false));
+      dispatch(setIsWishList(true));
+    }
+  }
+  
+  const handleProfileClick =()=>{
+    dispatch(setIsProfile(true));
+    dispatch(setIsOrder(false));
+    dispatch(setIsWishList(false));
+  }
+  
 
 
   return (
@@ -64,15 +95,18 @@ const DualNavBar = () => {
           <LocationOnIcon/>
           TRACK YOUR ORDER
         </div>
-        <div className="flex ">
+        {isLogin ? (<div className="flex ">
+        <Link className="cursor-pointer" to="/myaccount/profile" onClick={handleProfileClick}>My Account <span className="mx-2">|</span> </Link>
+        <div className="cursor-pointer mr-10" onClick={handleLogout}>Log Out</div>
+        </div>): (<div className="flex ">
         <div className="cursor-pointer" onClick={handleLoginClick}>LOG IN <span className="mx-2">|</span> </div>
         <div className="cursor-pointer mr-10" onClick={handleSignupClick}>SIGN UP</div>
-        </div>
+        </div>)}
       </div>
 
       <div>
-      {isLoginClick && <Login/>}
-        {isSignupClick && <Signup/>}
+      {isLoginPopup && <Login/>}
+        {isSignupPopup && <Signup/>}
         </div>
 
       <div className="flex justify-around">
@@ -80,16 +114,16 @@ const DualNavBar = () => {
           <img src={logoSVG} alt="logo" className="p-1"/>
         {/* <h1 id="name">BEYOUNG</h1> */}
         </Link>
-        <nav className="flex w-4/12 items-center my-auto h-full flex-nowrap justify-between list-none">
+        <nav className="flex w-4/12 items-center  my-auto h-full flex-nowrap justify-between list-none">
           <NavLink
-            className="font-bold  cursor-pointer  hover:bg-yellow-500 "
+            className="font-bold  cursor-pointer p-4 hover:bg-yellow-500 "
             onMouseEnter={() => setIsDropMenuVisible(true)}
             onMouseLeave={() => setIsDropMenuVisible(false)}
             to="/men">
             Men
           </NavLink>
           <NavLink
-            className="font-bold cursor-pointer  hover:bg-yellow-500 "
+            className="font-bold cursor-pointer p-4 hover:bg-yellow-500 "
             onMouseEnter={() => setIsDropMenuVisible(true)}
             onMouseLeave={() => setIsDropMenuVisible(false)}
             to="/women"
@@ -97,7 +131,7 @@ const DualNavBar = () => {
            Women
           </NavLink>
           <NavLink
-            className="font-bold cursor-pointer  hover:bg-yellow-500 "
+            className="font-bold cursor-pointer p-4 hover:bg-yellow-500 "
             onMouseEnter={() => setIsDropMenuVisible(true)}
             onMouseLeave={() => setIsDropMenuVisible(false)}
             to="/products/jogger"
@@ -108,8 +142,8 @@ const DualNavBar = () => {
 
         <div className="flex w-2/12 justify-between items-center" >
           <div className="cursor-pointer" onClick={handleSearchClick}><SearchIcon/></div>
-          <div className="cursor-pointer"><FavoriteBorderIcon/></div>
-          <div className="cursor-pointer"><ShoppingCartOutlinedIcon/></div>
+          <Link to="/myaccount/wishlist" className="cursor-pointer" onClick={handleWishListClick}><FavoriteBorderIcon/></Link>
+          <div  className="cursor-pointer"><ShoppingCartOutlinedIcon/></div>
           {searchClick && <SearchBar />}
         </div>
       </div>
@@ -120,7 +154,19 @@ const DualNavBar = () => {
       >
         {isDropMenuVisible && <DropDownMenu data={dropData} />}
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
+    
   );
 };
 const DropDownMenu = ({ data }) => {

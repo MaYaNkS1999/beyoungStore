@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="flex justify-around flex-wrap w-10/12 m-auto">
         <div className="flex flex-col gap-2 m-4">
           <h4 className="text-yellow-400 text-xl font-bold">NEED HELP</h4>
-          <Link >Contact Us</Link>
+          <Link to="/error">Contact Us</Link>
           <Link >Track Order</Link>
           <Link >Returns & Refunds</Link>
           <Link >FAQ's</Link>

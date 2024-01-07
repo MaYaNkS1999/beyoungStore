@@ -69,6 +69,12 @@ const Signup = () => {
           navigate('/', { replace: true });
         }else{
           toast.error(jsonData.message);
+          setUserInfo({
+            name: "",
+            email: "",
+            password: "",
+            appType: "ecommerce"
+          });
         }
   }
 

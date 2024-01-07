@@ -10,6 +10,7 @@ const Main = () => {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
+    
     fetchData();
   }, []);
   const fetchData = async () => {
