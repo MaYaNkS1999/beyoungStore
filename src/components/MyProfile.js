@@ -6,13 +6,15 @@ import { toast } from "react-toastify";
 const MyProfile = () => {
   
   // const email = localStorage.getItem("useremail");
-  const email="pratik@gmail.com";
+  const userInfo=JSON.parse(window.localStorage.getItem("userInfo"));
+  const {name}=userInfo;
+  const {email}=userInfo;
   // const [currentName, setCurrentName] = useState(localStorage.getItem("username"))
-  const [currentName,setCurrentName]=useState("Prateek Raj");
+  const [currentName,setCurrentName]=useState("");
 
-  const [username, setUsername] = useState("Prateek Raj");
+  const [username, setUsername] = useState(name);
   const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [newPassword, setNewPassword] = useState(userInfo.name);
 
   const [isFormActive, setIsFormActive] = useState(false);
   const [editingUsername, setEditingUsername] = useState(false);

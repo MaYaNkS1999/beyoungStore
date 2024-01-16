@@ -8,7 +8,7 @@ const userSlice= createSlice({
     reducers:{
         addUserDetails :(state,action)=>{
             window.localStorage.setItem("userInfo",JSON.stringify(action.payload));
-            console.log("user details",action.payload);
+            // console.log("user details",action.payload);
             state.userInfo=action.payload;
         }
     }

@@ -24,6 +24,7 @@ const authSlice= createSlice({
             state.isSignupPopup=action.payload;
         },
         setToken:(state,action)=>{
+            window.localStorage.setItem("token",action.payload);
             state.token=action.payload;
         }
     }

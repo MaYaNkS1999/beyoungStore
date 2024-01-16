@@ -1,36 +1,37 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { Divider} from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Footer = () => {
+  
   return (
     <div className="bg-black text-white w-full py-5 px-4">
       <div className="flex justify-around flex-wrap w-10/12 m-auto">
         <div className="flex flex-col gap-2 m-4">
           <h4 className="text-yellow-400 text-xl font-bold">NEED HELP</h4>
           <Link to="/error">Contact Us</Link>
-          <Link >Track Order</Link>
-          <Link >Returns & Refunds</Link>
-          <Link >FAQ's</Link>
-          <Link >Career</Link>
+          <Link to="/error">Track Order</Link>
+          <Link to="/error">Returns & Refunds</Link>
+          <Link to="/error">FAQ's</Link>
+          <Link to="/error">Career</Link>
         </div>
         <div className="flex flex-col gap-2 m-4">
           <h4 className="text-yellow-400 text-xl font-bold">COMPANY</h4>
-          <Link >About Us</Link>
-          <Link >Beyoung Blog</Link>
-          <Link >Beyoungistan</Link>
-          <Link >Collabration</Link>
-          <Link >Media</Link>
+          <Link to="/error">About Us</Link>
+          <Link to="/error">Beyoung Blog</Link>
+          <Link to="/error">Beyoungistan</Link>
+          <Link to="/error">Collabration</Link>
+          <Link to="/error">Media</Link>
         </div>
         <div className="flex flex-col gap-2 m-4">
           <h4 className="text-yellow-400 text-xl font-bold">MORE INFO</h4>
-          <Link >Term and Condition</Link>
-          <Link >Privacy Policy</Link>
-          <Link >Shipping Policy</Link>
-          <Link >Sitemap</Link>
+          <Link to="/error">Term and Condition</Link>
+          <Link to="/error">Privacy Policy</Link>
+          <Link to="/error">Shipping Policy</Link>
+          <Link to="/error">Sitemap</Link>
         </div>
         <div className="flex flex-col gap-2 m-4">
           <h4 className="text-yellow-400 text-xl font-bold">LOCATION</h4>

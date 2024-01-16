@@ -1,10 +1,8 @@
 import  React,{useState} from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-// import { useError } from '../context/ErrorContext';
 import errorImage from "../assets/Error404.jpg";
+import { useNavigate } from 'react-router-dom';
 
 
 const style = {
@@ -13,26 +11,16 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  // boxShadow: '0px 10px 33px 49px #3d2073',
-  
-  // p: 4,
-};
+  };
 
 const Error404 = () => {
-
-  // const {showError,updateErrorStatus} = useError();
-  // const handleClose = () => updateErrorStatus(false);
+  const navigate=useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleCloseModal = () => {
-    // Update the state to close the modal
     setIsModalOpen(false);
-
-    // Perform additional actions if needed
-    // For example, resetting form fields, fetching new data, etc.
+    navigate("/")
   };
-
-
   return (
     <div>
     <Modal

@@ -1,13 +1,57 @@
-import React, { useState } from 'react';
-import WishlistCard from './WishlistCard';
+import React, { useEffect, useState } from "react";
+import WishlistCard from "./WishlistCard";
 import emptyImage from "../assets/EMPTY-WISHLIST-PAGE.jpg";
+import { baseUrl } from "../utils/constant";
+import { toast } from "react-toastify";
 
 const WishList = () => {
-  const [products,setProducts]=useState([]);
+  const [products, setProducts] = useState([]);
+  const token = window.localStorage.getItem("token");
+
+  const clearAllWishlist =async () => {
+    const apiUrl=baseUrl+"/api/v1/ecommerce/wishlist";
+    const response=await fetch(apiUrl,{
+      method:"DELETE",
+      headers:{
+        projectId:"fio1831j50s3",
+        Authorization:`Bearer ${token}`
+      }
+    })
+    const jsonData=await response.json();
+    console.log(jsonData);
+    if(response.ok){
+      toast.success("WishList is empty");
+    }
+  };
+
+  const removeProductFromState = (productId) => {
+    // const updatedProducts = products.filter(
+    //   (product) => product._id !== productId
+    // );
+    // setProducts(updatedProducts);
+  };
+
+  const fetchWishList = async () => {
+    const apiUrl = baseUrl + `/api/v1/ecommerce/wishlist`;
+    const response = await fetch(apiUrl, {
+      method:"GET",
+      headers: {
+        projectId: "fio1831j50s3",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const jsonData = await response.json();
+    setProducts(jsonData.data.items);
+  };
+
+  useEffect(() => {
+    fetchWishList();
+  }, []);
+
   return (
-    <div className="wishlist-section">
-      {products.length>0 && (
-        <button onClick={clearAllWishlist}>Clear wishlist</button>
+    <div className="relative flex flex-col w-full">
+      {products.length > 0 && (
+        <button onClick={clearAllWishlist} className="absolute self-end -mt-10 mr-1 rounded-md bg-amber-300 p-2 cursor-pointer font-bold hover:bg-amber-400">Clear wishlist</button>
       )}
       {products.length === 0 ? (
         <img
@@ -16,7 +60,7 @@ const WishList = () => {
           alt="empty-wishlist"
         />
       ) : (
-        <div className="wishlist-container">
+        <div className="p-1 flex flex-wrap gap-5">
           {products.map((product, i) => (
             <WishlistCard
               key={i}
@@ -28,6 +72,6 @@ const WishList = () => {
       )}
     </div>
   );
-}
+};
 
-export default WishList
+export default WishList;

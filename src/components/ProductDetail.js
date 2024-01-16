@@ -1,27 +1,41 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { baseUrl } from "../utils/constant";
-import { Rating,Divider,LinearProgress } from "@mui/material";
+import { Rating, Divider, LinearProgress } from "@mui/material";
 import DiscountIcon from "@mui/icons-material/Discount";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import CancelIcon from "@mui/icons-material/Cancel";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp"
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { toast } from "react-toastify";
+import { setCartLength } from "../utils/redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [productDetail, setProductDetail] = useState(null);
-
+  const isLogin=window.localStorage.getItem("isLogin");
   const [selectedQty, setSelectedQty] = useState(1);
   const [pinCode, setPinCode] = useState();
   const [showZipValidation, setShowZipValidation] = useState(false);
   const [isValidPinCode, setIsValidPincode] = useState();
+  const token = window.localStorage.getItem("token");
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleBuyNow=()=>{
+    if(isLogin){
+    navigate("/cart/address",)
+    }else{
+      toast.warning("Please LogIn");
+    }
+  }
 
   const fetchData = async () => {
     const url = baseUrl + `/api/v1/ecommerce/product/${productId}`;
@@ -33,7 +47,6 @@ const ProductDetail = () => {
     });
     const jsonData = await response.json();
     setProductDetail(jsonData.data);
-    console.log(jsonData);
   };
   const handleCheckClick = () => {
     setShowZipValidation(true);
@@ -50,6 +63,33 @@ const ProductDetail = () => {
   const handleChangeInputBox = (e) => {
     setPinCode(e.target.value);
     setShowZipValidation(false);
+  };
+
+  const handleAddToCart = async () => {
+    if(isLogin){
+    const apiUrl = baseUrl + `/api/v1/ecommerce/cart/${productId}`;
+    const response = await fetch(apiUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "projectId": "fio1831j50s3",
+      },
+
+      body: JSON.stringify({
+        quantity: 1,
+        size: "S",
+      }),
+    });
+    const jsonData = await response.json();
+    if(response.ok){
+      window.localStorage.setItem("cartLength",jsonData.results);
+      dispatch(setCartLength(jsonData.results));
+      toast.success("Item added to cart");
+    }
+  }else{
+    toast.warning("Please Login");
+  }
   };
 
   if (productDetail === null) return;
@@ -116,10 +156,13 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex flex-wrap justify-between mt-10 ">
-              <button className="w-5/12 bg-teal-300 hover:bg-teal-400 rounded-lg py-5">
+              <button
+                className="w-5/12 bg-teal-300 hover:bg-teal-400 rounded-lg py-5"
+                onClick={handleAddToCart}
+              >
                 <AddShoppingCartIcon /> Add to cart
               </button>
-              <button className="w-5/12 bg-amber-400 hover:bg-amber-500 rounded-lg">
+              <button onClick={handleBuyNow} className="w-5/12 bg-amber-400 hover:bg-amber-500 rounded-lg">
                 <ShoppingCartCheckoutIcon /> Buy now
               </button>
             </div>
@@ -213,7 +256,9 @@ const ProductDetail = () => {
             </ul>
           </div>
           <div className="w-4/12 bg-gray-200 p-3">
-            <h5 className="text-xl font-medium mb-2">Delivery & Return Policy</h5>
+            <h5 className="text-xl font-medium mb-2">
+              Delivery & Return Policy
+            </h5>
             <div className="collaps-content">
               We provide free shipping on all orders. Pay online to avoid
               charges of ₹50/product applicable on COD orders. The return or
@@ -230,17 +275,23 @@ const ProductDetail = () => {
         <h3 className="text-3xl font-medium mb-2">Rating & Review</h3>
         <div className="flex p-10 bg-gray-200 gap-10">
           <div className="p-16 bg-black text-amber-400 flex flex-col gap-6  items-center w-4/12">
-            <h3 className="text-5xl font-bold">{productDetail.ratings.toFixed(1)}</h3>
-            <Rating  value={productDetail.ratings} />
-            <p className="text-2xl font-bold">Based on 31K+ ratings and 9K+ reviews</p>
+            <h3 className="text-5xl font-bold">
+              {productDetail.ratings.toFixed(1)}
+            </h3>
+            <Rating value={productDetail.ratings} />
+            <p className="text-2xl font-bold">
+              Based on 31K+ ratings and 9K+ reviews
+            </p>
           </div>
           <div className="w-6/12">
-            <h4 className="border-b-amber-300 border-b-4 text-3xl font-bold ">Product reviews</h4>
+            <h4 className="border-b-amber-300 border-b-4 text-3xl font-bold ">
+              Product reviews
+            </h4>
             <p className="my-10">
-              <ThumbUpIcon className="mr-4"/>
+              <ThumbUpIcon className="mr-4" />
               91% of customers recommend this brand
-              </p>
-              <Divider sx={{ marginBottom: "2rem" }} />
+            </p>
+            <Divider sx={{ marginBottom: "2rem" }} />
             <div className="flex gap-4 items-center pr-8 ">
               <span>5</span>
               <StarBorderIcon />

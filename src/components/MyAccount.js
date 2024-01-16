@@ -1,14 +1,16 @@
 
 import React, { useEffect, useState } from 'react';
-import { Avatar, Stack, Typography, useMediaQuery } from "@mui/material";
-import {Outlet,NavLink,Link,Route,Routes, useNavigate} from "react-router-dom";
+import { Avatar, Stack, Typography } from "@mui/material";
+import {Outlet,NavLink,Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setIsLogin} from "../utils/redux/authSlice";
 import {setIsProfile,setIsWishList,setIsOrder} from "../utils/redux/accountSlice"
+import { toast } from "react-toastify";
 
 
 const MyAccount = () => {
-  const name="Prateek Raj";
+  const userInfo=JSON.parse(window.localStorage.getItem("userInfo"));
+  const {name}=userInfo;
   const navigate=useNavigate();
   const isProfile=useSelector((store)=>store.account.isProfile);
   const isWishList=useSelector(store=>store.account.isWishList);
@@ -16,7 +18,10 @@ const MyAccount = () => {
     const isLogin=useSelector((store)=>store.auth.isLogin);
 
     const dispatch=useDispatch();
+    console.log(userInfo);
+
     const handleLogout=()=>{
+      toast.success("Logout successfully");
       dispatch(setIsLogin(false));
     }
 
@@ -47,7 +52,7 @@ const MyAccount = () => {
   return (
     <div className='w-10/12 m-auto my-10'>
 
-       <div className='flex gap-16'>
+       <div className='flex gap-16 items-start'>
         <div className='flex w-3/12 flex-col gap-3 border border-gray-400 rounded-lg'>
         <Stack
             // sx={{ margin: "1rem" }}

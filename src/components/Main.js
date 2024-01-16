@@ -10,7 +10,6 @@ const Main = () => {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    
     fetchData();
   }, []);
   const fetchData = async () => {
@@ -23,7 +22,6 @@ const Main = () => {
       });
       const json = await response.json();
       setCategory(json.data);
-      console.log(json.data);
   };
 
   return (

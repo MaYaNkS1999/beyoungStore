@@ -17,6 +17,12 @@ import MyAccount from "./MyAccount";
 import Order from "./Order";
 import WishList from "./WishList";
 import Error404 from "./Error404";
+import CartComponent from "./cart/CartComponent";
+import CartItems from "./cart/CartItems";
+import CheckoutAddress from "./checkout/CheckoutAddress";
+import PaymentSection from "./checkout/PaymentSection";
+import SuccessModel from "./checkout/SuccessModel";
+import SearchPage from "./SearchPage";
 
 function App() {
   return <div className="App">
@@ -70,6 +76,32 @@ export const appRouter=createBrowserRouter([
     {
       path:"/jogger",
       element:<Jogger/>
+    },
+    {
+      path:"/cart",
+      element:<CartComponent/>,
+      children:[
+        {
+          path:"/cart/address",
+          element: <CheckoutAddress/>
+        },
+        {
+          path:"/cart/cartitems",
+          element: <CartItems/>
+        },
+        {
+          path:"/cart/payment",
+          element: <PaymentSection/>
+        },
+        {
+          path:"/cart/success",
+          element: <SuccessModel/>
+        }
+      ]
+    },
+    {
+      path:"/search/:inputValue",
+      element:<SearchPage/>
     },
     {
       path:"/product/:productId",

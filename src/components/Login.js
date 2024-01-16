@@ -56,8 +56,6 @@ const Login = () => {
       body: JSON.stringify(userInfo),
     });
     const jsonData = await response.json();
-    console.log(userInfo);
-    console.log(jsonData);
     if (response.ok) {
       // Navigate to a different route
       toast.success("Login Successfully");
