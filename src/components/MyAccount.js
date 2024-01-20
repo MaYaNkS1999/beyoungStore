@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const MyAccount = () => {
   const userInfo=JSON.parse(window.localStorage.getItem("userInfo"));
   const {name}=userInfo;
+  // console.log(userInfo.user);
   const navigate=useNavigate();
   const isProfile=useSelector((store)=>store.account.isProfile);
   const isWishList=useSelector(store=>store.account.isWishList);
@@ -18,7 +19,6 @@ const MyAccount = () => {
     const isLogin=useSelector((store)=>store.auth.isLogin);
 
     const dispatch=useDispatch();
-    console.log(userInfo);
 
     const handleLogout=()=>{
       toast.success("Logout successfully");

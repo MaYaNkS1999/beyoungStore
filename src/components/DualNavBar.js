@@ -85,6 +85,7 @@ const DualNavBar = () => {
       dispatch(setIsProfile(false));
       dispatch(setIsOrder(false));
       dispatch(setIsWishList(true));
+      navigate("/myaccount/wishlist");
     }
   };
 
@@ -181,15 +182,14 @@ const DualNavBar = () => {
           <div className="cursor-pointer" onClick={handleSearchClick}>
             <SearchIcon />
           </div>
-          <Link
-            to="/myaccount/wishlist"
+          <div
             className="cursor-pointer"
             onClick={handleWishListClick}
           >
             <Badge badgeContent={0} color="secondary">
               <FavoriteBorderIcon />
             </Badge>
-          </Link>
+          </div>
           <div className="cursor-pointer" onClick={handleCartClick}>
             <Badge badgeContent={cartLength} color="primary">
               <ShoppingCartOutlinedIcon />

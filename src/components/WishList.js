@@ -41,14 +41,14 @@ const WishList = () => {
       },
     });
     const jsonData = await response.json();
-    setProducts(jsonData.data.items);
+    setProducts(jsonData.data?.items);
   };
 
   useEffect(() => {
     fetchWishList();
   }, []);
 
-  return (
+  return products && (
     <div className="relative flex flex-col w-full">
       {products.length > 0 && (
         <button onClick={clearAllWishlist} className="absolute self-end -mt-10 mr-1 rounded-md bg-amber-300 p-2 cursor-pointer font-bold hover:bg-amber-400">Clear wishlist</button>

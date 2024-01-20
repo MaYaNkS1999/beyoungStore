@@ -35,7 +35,7 @@ const CartComponent = () => {
       },
     });
     const jsonData = await response.json();
-    setProducts(jsonData.data.items);
+    setProducts(jsonData.data?.items);
     setData(jsonData.data);
   };
   
@@ -79,7 +79,7 @@ const CartComponent = () => {
     }
   }, [isLogin]);
   
-  return (
+  return products && (
     <div>
       <CheckoutHeader />
       {products.length === 0 ? (

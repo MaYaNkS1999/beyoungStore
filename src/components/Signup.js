@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
-import { setIsLogin, setIsSignupPopup } from "../utils/redux/authSlice";
+import { setIsLogin, setIsSignupPopup,setToken } from "../utils/redux/authSlice";
+import { addUserDetails } from "../utils/redux/userSlice";
 
 const Signup = () => {
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [token, setToken] = useState();
+  // const [token, setToken] = useState();
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -61,12 +62,12 @@ const Signup = () => {
       body: JSON.stringify(userInfo),
     });
     const jsonData = await response.json();
-    setToken(jsonData.token);
+    console.log(jsonData);
     if (response.ok) {
       // Navigate to a different route
       dispatch(setIsLogin(true));
       dispatch(setIsSignupPopup(false));
-      dispatch(addUserDetails(jsonData.data));
+      dispatch(addUserDetails(jsonData.data.user));
       dispatch(setToken(jsonData.token));
       toast.success("Your Account is Created.");
       navigate("/", { replace: true });
