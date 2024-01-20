@@ -15,7 +15,6 @@ const Card = ({ item }) => {
     if (!isLogin) {
       toast.error("Please Log In");
     } else {
-      console.log(token);
       const apiUrl = baseUrl + `/api/v1/ecommerce/wishlist`;
       const response = await fetch(apiUrl, {
         method: "PATCH",

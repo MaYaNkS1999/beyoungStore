@@ -16,26 +16,26 @@ import { useDispatch } from "react-redux";
 const ProductDetail = () => {
   const { productId } = useParams();
   const [productDetail, setProductDetail] = useState(null);
-  const isLogin=window.localStorage.getItem("isLogin");
+  const isLogin = window.localStorage.getItem("isLogin");
   const [selectedQty, setSelectedQty] = useState(1);
   const [pinCode, setPinCode] = useState();
   const [showZipValidation, setShowZipValidation] = useState(false);
   const [isValidPinCode, setIsValidPincode] = useState();
   const token = window.localStorage.getItem("token");
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleBuyNow=()=>{
-    if(isLogin){
-    navigate("/cart/address",)
-    }else{
+  const handleBuyNow = () => {
+    if (isLogin) {
+      navigate("/cart/address");
+    } else {
       toast.warning("Please LogIn");
     }
-  }
+  };
 
   const fetchData = async () => {
     const url = baseUrl + `/api/v1/ecommerce/product/${productId}`;
@@ -66,30 +66,30 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
-    if(isLogin){
-    const apiUrl = baseUrl + `/api/v1/ecommerce/cart/${productId}`;
-    const response = await fetch(apiUrl, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-        "projectId": "fio1831j50s3",
-      },
+    if (!isLogin) {
+      toast.warning("Please Login");
+    } else {
+      const apiUrl = baseUrl + `/api/v1/ecommerce/cart/${productId}`;
+      const response = await fetch(apiUrl, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          projectId: "fio1831j50s3",
+        },
 
-      body: JSON.stringify({
-        quantity: 1,
-        size: "S",
-      }),
-    });
-    const jsonData = await response.json();
-    if(response.ok){
-      window.localStorage.setItem("cartLength",jsonData.results);
-      dispatch(setCartLength(jsonData.results));
-      toast.success("Item added to cart");
+        body: JSON.stringify({
+          quantity: 1,
+          size: "S",
+        }),
+      });
+      const jsonData = await response.json();
+      if (response.ok) {
+        window.localStorage.setItem("cartLength", jsonData.results);
+        dispatch(setCartLength(jsonData.results));
+        toast.success("Item added to cart");
+      }
     }
-  }else{
-    toast.warning("Please Login");
-  }
   };
 
   if (productDetail === null) return;
@@ -162,7 +162,10 @@ const ProductDetail = () => {
               >
                 <AddShoppingCartIcon /> Add to cart
               </button>
-              <button onClick={handleBuyNow} className="w-5/12 bg-amber-400 hover:bg-amber-500 rounded-lg">
+              <button
+                onClick={handleBuyNow}
+                className="w-5/12 bg-amber-400 hover:bg-amber-500 rounded-lg"
+              >
                 <ShoppingCartCheckoutIcon /> Buy now
               </button>
             </div>
