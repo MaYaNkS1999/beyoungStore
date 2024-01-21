@@ -3,10 +3,14 @@ import WishlistCard from "./WishlistCard";
 import emptyImage from "../assets/EMPTY-WISHLIST-PAGE.jpg";
 import { baseUrl } from "../utils/constant";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { setWishlistDummy } from "../utils/redux/cartSlice";
 
 const WishList = () => {
   const [products, setProducts] = useState([]);
   const token = window.localStorage.getItem("token");
+  const wishlistDummy=useSelector(store=>store.cart.wishlistDummy);
+  const dispatch=useDispatch();
 
   const clearAllWishlist =async () => {
     const apiUrl=baseUrl+"/api/v1/ecommerce/wishlist";
@@ -18,9 +22,9 @@ const WishList = () => {
       }
     })
     const jsonData=await response.json();
-    console.log(jsonData);
     if(response.ok){
       toast.success("WishList is empty");
+      dispatch(setWishlistDummy(!wishlistDummy));
     }
   };
 
@@ -46,7 +50,7 @@ const WishList = () => {
 
   useEffect(() => {
     fetchWishList();
-  }, []);
+  }, [wishlistDummy]);
 
   return products && (
     <div className="relative flex flex-col w-full">

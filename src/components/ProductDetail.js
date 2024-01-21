@@ -10,8 +10,6 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { toast } from "react-toastify";
-import { setCartLength } from "../utils/redux/cartSlice";
-import { useDispatch } from "react-redux";
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -22,7 +20,6 @@ const ProductDetail = () => {
   const [showZipValidation, setShowZipValidation] = useState(false);
   const [isValidPinCode, setIsValidPincode] = useState();
   const token = window.localStorage.getItem("token");
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,8 +82,6 @@ const ProductDetail = () => {
       });
       const jsonData = await response.json();
       if (response.ok) {
-        window.localStorage.setItem("cartLength", jsonData.results);
-        dispatch(setCartLength(jsonData.results));
         toast.success("Item added to cart");
       }
     }

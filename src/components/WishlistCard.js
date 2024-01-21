@@ -1,17 +1,20 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Stack, Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { baseUrl } from "../utils/constant";
 import { toast } from "react-toastify";
+import { setWishlistDummy } from "../utils/redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const WishlistCard = ({ product }) => {
   const { displayImage, _id, name, price } = product.products;
   const token = window.localStorage.getItem("token");
-  const navigate = useNavigate();
+  const dispatch=useDispatch();
+  const wishlistDummy=useSelector(store=>store.cart.wishlistDummy);
 
   const moveToCart = async () => {
-    handleRemoveItem();
+    
     const apiUrl = baseUrl + `/api/v1/ecommerce/cart/${_id}`;
     const response = await fetch(apiUrl, {
       method: "PATCH",
@@ -27,8 +30,8 @@ const WishlistCard = ({ product }) => {
       }),
     });
     const jsonData = await response.json();
-    console.log(jsonData);
     if (response.ok) {
+      handleRemoveItem();
       toast.success("Item added to cart");
     }
   };
@@ -44,9 +47,11 @@ const WishlistCard = ({ product }) => {
     const jsonData = await response.json();
     if (response.ok) {
       toast.success("Item is removed");
-      navigate("/myaccount/wishlist");
+      dispatch(setWishlistDummy(!wishlistDummy));
     }
   };
+  
+  
   return (
     <div className="relative w-3/12">
       <Link to={`/product/${_id}`}>

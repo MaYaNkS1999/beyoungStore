@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 import { baseUrl } from "../../utils/constant";
 import { toast } from "react-toastify";
 import { useDispatch,useSelector } from "react-redux";
-import {setCartLength} from "../../utils/redux/cartSlice";
+import {setCartDummy} from "../../utils/redux/cartSlice";
 
 const CartItemCard = ({ product }) => {
   const { _id, name, displayImage, price } = product.product;
   const token=window.localStorage.getItem("token");
   const quantity = product.quantity;
   const [qty, setQty] = useState(quantity);
-  const cartLength=useSelector(store=>store.cart.cartLength);
+  const cartDummy=useSelector(store=>store.cart.cartDummy);
   const dispatch=useDispatch();
 
   const handleQtyChange = (event) => {
@@ -30,14 +30,13 @@ const CartItemCard = ({ product }) => {
     const jsonData=await response.json();
     if(response.ok){
       toast.success("Item removed from Cart");
-      dispatch(setCartLength(quantity-1));
+      dispatch(setCartDummy(!cartDummy));
     }else{
       toast.error("Something went wrong");
     }
   };
 
   const moveToWishlist = async () => {
-    removeItemFromCart(_id);
     const apiUrl = baseUrl + `/api/v1/ecommerce/wishlist`;
       const response = await fetch(apiUrl, {
         method: "PATCH",
@@ -51,16 +50,14 @@ const CartItemCard = ({ product }) => {
         }),
       });
       const jsonData = await response.json();
-      console.log(jsonData);
       if(response.ok){
+        removeItemFromCart(_id);
         toast.success("Item moved to wishlist");
       }else{
         toast.error("Something went wrong");
       }
   };
 
-  useEffect(()=>{
-  },[cartLength])
 
   return (
     <div className="border border-gray-300 p-1 bg-white mb-4">

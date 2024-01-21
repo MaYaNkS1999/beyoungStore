@@ -3,15 +3,13 @@ import { baseUrl } from "../../utils/constant";
 import { useEffect } from "react";
 import { useState } from "react";
 import CartItemCard from "./CartItemCard";
-import { useDispatch, useSelector } from "react-redux";
-import {setCartLength} from "../../utils/redux/cartSlice";
+import {useSelector } from "react-redux";
 
 const CartItems = () => {
   const [cartItems, setCartItems] = useState([]);
   const [data, setData] = useState([]);
   const token = window.localStorage.getItem("token");
-  const cartLength=useSelector(store=>store.cart.cartLength);
-  const dispatch=useDispatch();
+  const cartDummy=useSelector(store=>store.cart.cartDummy);
 
   const fetchData = async () => {
     const apiUrl = baseUrl + `/api/v1/ecommerce/cart`;
@@ -23,13 +21,12 @@ const CartItems = () => {
     });
     const jsonData = await response.json();
     setCartItems(jsonData.data.items);
-    dispatch(setCartLength(cartItems.length));
     setData(jsonData.data);
   };
 
   useEffect(() => {
     fetchData();
-  }, [cartLength]);
+  }, [cartDummy]);
 
   return cartItems && (
     

@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {setIsLogin} from "../utils/redux/authSlice";
 import {setIsProfile,setIsWishList,setIsOrder} from "../utils/redux/accountSlice"
 import { toast } from "react-toastify";
+import { setShowDeleteDialogue } from '../utils/redux/accountSlice';
+import DeleteMeDialoge from './DeleteMeDialoge';
 
 
 const MyAccount = () => {
@@ -17,6 +19,7 @@ const MyAccount = () => {
   const isWishList=useSelector(store=>store.account.isWishList);
   const isOrder=useSelector(store=>store.account.isOrder);
     const isLogin=useSelector((store)=>store.auth.isLogin);
+    const showDeleteDialogue=useSelector(store=>store.account.showDeleteDialogue)
 
     const dispatch=useDispatch();
 
@@ -41,6 +44,10 @@ const MyAccount = () => {
       dispatch(setIsProfile(false));
       dispatch(setIsOrder(false));
       dispatch(setIsWishList(true));
+    }
+
+    const showDeletemeDialoge = ()=>{
+      dispatch(setShowDeleteDialogue(true));
     }
 
     useEffect(()=>{
@@ -82,10 +89,13 @@ const MyAccount = () => {
             <NavLink to={"wishlist"}  className={isWishList? "border-b border-gray-400 py-2 font-bold text-black":"border-b border-gray-400 py-2 text-gray-400"} onClick={handleWishListClick}>Wishlist</NavLink>
           </nav>
           <section className='flex flex-col gap-3 '>
-            <Link className='flex justify-center items-center text-red-600 hover:underline'>Delete My Account</Link>
+            <Link onClick={showDeletemeDialoge} className='flex justify-center items-center text-red-600 hover:underline'>Delete My Account</Link>
             <button className='bg-yellow-400 p-2 m-4 rounded-lg hover:bg-yellow-300 font-bold text-gray-800' onClick={handleLogout}>LOGOUT</button>
           </section>
         </div>
+        
+        <DeleteMeDialoge open={showDeleteDialogue} setOpen={setShowDeleteDialogue}/>
+
         <div className='w-7/12'>
             <Outlet/>
         </div>

@@ -34,7 +34,6 @@ const DualNavBar = () => {
   const { isLoginPopup, isSignupPopup } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const isLogin = useSelector((store) => store.auth.isLogin);
-  const cartLength=useSelector(store=>store.cart.cartLength);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -191,7 +190,7 @@ const DualNavBar = () => {
             </Badge>
           </div>
           <div className="cursor-pointer" onClick={handleCartClick}>
-            <Badge badgeContent={cartLength} color="primary">
+            <Badge badgeContent={0} color="primary">
               <ShoppingCartOutlinedIcon />
             </Badge>
           </div>

@@ -38,7 +38,6 @@ const Men=()=>{
             }
         });
         const jsonData=await response.json();
-        console.log(jsonData);
         if(response.ok){
             setWomenItem((prevData) => [...prevData, ...jsonData.data]);
         setPage((prevPage) =>  prevPage + 1);

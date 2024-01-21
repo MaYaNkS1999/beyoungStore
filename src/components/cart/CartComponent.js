@@ -8,6 +8,7 @@ import { Divider } from "@mui/material";
 import { toast } from "react-toastify";
 import { setIsClearcart } from "../../utils/redux/checkoutSlice";
 import { setButtonDisable } from "../../utils/redux/checkoutSlice";
+import { setCartDummy } from "../../utils/redux/cartSlice";
 
 const CartComponent = () => {
   const location = useLocation();
@@ -25,6 +26,8 @@ const CartComponent = () => {
     (store) => store.checkout.isClearcartDisable
   );
   const dispatch = useDispatch();
+  const cartDummy=useSelector(store=>store.cart.cartDummy);
+  
   
   const fetchData = async () => {
     const apiUrl = baseUrl + `/api/v1/ecommerce/cart`;
@@ -66,6 +69,7 @@ const CartComponent = () => {
     const jsonData = await response.json();
     if (response.ok) {
       toast.success("Cart is Cleared");
+      dispatch(setCartDummy(!cartDummy));
     } else {
       toast.error("Something went wrong");
     }
@@ -77,7 +81,7 @@ const CartComponent = () => {
     } else {
       fetchData();
     }
-  }, [isLogin]);
+  }, [isLogin,cartDummy]);
   
   return products && (
     <div>

@@ -6,6 +6,7 @@ const accountSlice= createSlice({
         isProfile:false,
         isWishList:false,
         isOrder:false,
+        showDeleteDialogue:false,
     },
     reducers:{
         setIsProfile:(state,action)=>{
@@ -16,10 +17,13 @@ const accountSlice= createSlice({
         },
         setIsOrder:(state,action)=>{
             state.isOrder=action.payload;
+        },
+        setShowDeleteDialogue:(state,action)=>{
+            state.showDeleteDialogue=action.payload;
         }
     }
 })
 
-export const {setIsProfile,setIsWishList,setIsOrder}=accountSlice.actions;
+export const {setIsProfile,setIsWishList,setIsOrder,setShowDeleteDialogue}=accountSlice.actions;
 
 export default accountSlice.reducer;
