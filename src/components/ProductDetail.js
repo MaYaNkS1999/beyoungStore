@@ -10,6 +10,7 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { toast } from "react-toastify";
+import {useMediaQuery} from '@mui/material';
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -21,6 +22,7 @@ const ProductDetail = () => {
   const [isValidPinCode, setIsValidPincode] = useState();
   const token = window.localStorage.getItem("token");
   const navigate = useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   useEffect(() => {
     fetchData();
@@ -57,9 +59,15 @@ const ProductDetail = () => {
       }
     }
   };
+  function isAlphabet(inputStr) {
+    return /^[a-zA-Z]+$/.test(inputStr);
+}
   const handleChangeInputBox = (e) => {
+    if(!isAlphabet(e.target.value)){
     setPinCode(e.target.value);
     setShowZipValidation(false);
+    }
+    
   };
 
   const handleAddToCart = async () => {
@@ -91,16 +99,16 @@ const ProductDetail = () => {
 
   return (
     <div className="w-10/12 m-auto my-8">
-      <div className="flex justify-between flex-wrap">
-        <div className="w-5/12">
+      <div className={`flex ${smallScreen? 'flex-col':''} justify-between flex-wrap`}>
+        <div className={smallScreen?'':`w-5/12`}>
           <img
             src={productDetail.displayImage}
             alt="product image"
-            className="w-full"
+            className={`w-full ${smallScreen && 'rounded-lg'}`}
           />
         </div>
 
-        <div className="w-6/12">
+        <div className={smallScreen ?'w-full':`w-6/12`}>
           <div className="flex flex-col gap-3 py-3">
             <h1 className="text-3xl">{productDetail.name.toUpperCase()}</h1>
             <h3 className="text-gray-500 text-l">
@@ -172,16 +180,17 @@ const ProductDetail = () => {
                   Enter your Pincode to check the delivery time and free pick up
                   options
                 </p>
-                <div className="mt-2 w-6/12 flex justify-between border border-gray-300 p-1">
+                <div className={`mt-2  flex ${smallScreen ?'':'justify-between'} border border-gray-300 p-1`}>
                   <input
                     type="text"
                     name="pincode"
-                    className="focus:border-none focus:outline-none"
+                    className="w-full focus:border-none focus:outline-none"
                     id="pincode"
+                    maxLength={6}
                     value={pinCode}
                     onChange={handleChangeInputBox}
                     placeholder="Enter Pincode"
-                  />{" "}
+                  />
                   <button
                     className="text-teal-400 hover:text-teal-700"
                     onClick={handleCheckClick}

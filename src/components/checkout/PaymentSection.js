@@ -2,6 +2,7 @@ import { Button, Grid, TextField } from "@mui/material";
 import React, {useState } from "react";
 import { useDispatch } from "react-redux";
 import { setButtonDisable } from "../../utils/redux/checkoutSlice";
+import {useMediaQuery} from '@mui/material';
 
 const PaymentSection = () => {
   const dispatch=useDispatch();
@@ -13,6 +14,7 @@ const PaymentSection = () => {
       year: false,
       cvv: false,
     });
+    const smallScreen=useMediaQuery('(max-width:650px)');
   
     const [cardInfo, setCardInfo] = useState({
       ccnum: "",
@@ -93,7 +95,7 @@ const PaymentSection = () => {
     }
     
   return (
-    <div className="bg-white ml-2 p-2">
+    <div className={`bg-white ${smallScreen?'mx-2 mb-2':'ml-2'}  p-2 rounded-lg`}>
     <h5 className="font-bold">Enter Your Debit/Credit Card Details</h5>
     <p className="mb-2">We do not store your card details.</p>
     <section className="payments form">

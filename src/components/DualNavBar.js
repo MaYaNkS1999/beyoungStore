@@ -25,16 +25,20 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRef } from "react";
 import Badge from "@mui/material/Badge";
+import MenuIcon from '@mui/icons-material/Menu';
+import {useMediaQuery} from '@mui/material';
+import SidePannel from "./SidePannel";
 
 const DualNavBar = () => {
   const [dropData, setDropData] = useState([]);
   const [isDropMenuVisible, setIsDropMenuVisible] = useState(false);
   const [searchClick, setSearchClick] = useState(false);
-
+  const [menuToggle,setMenuToggle]=useState(false);
   const { isLoginPopup, isSignupPopup } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const isLogin = useSelector((store) => store.auth.isLogin);
   const navigate = useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   useEffect(() => {
     fetchData();
@@ -103,6 +107,10 @@ const DualNavBar = () => {
     }
   };
 
+  const handleMenuToggle=()=>{
+    setMenuToggle(!menuToggle);
+  }
+
   return (
     <div>
       <div className="bg-yellow-300 text-center">
@@ -122,9 +130,9 @@ const DualNavBar = () => {
               to="/myaccount/profile"
               onClick={handleProfileClick}
             >
-              My Account <span className="mx-2">|</span>{" "}
+              My Account <span className="mx-2">|</span>
             </Link>
-            <div className="cursor-pointer mr-10" onClick={handleLogout}>
+            <div className={`cursor-pointer ${!smallScreen && 'mr-10'}`} onClick={handleLogout}>
               Log Out
             </div>
           </div>
@@ -146,11 +154,14 @@ const DualNavBar = () => {
       </div>
 
       <div className="flex justify-around">
+        <div className="flex flex-col justify-center cursor-pointer" onClick={handleMenuToggle}>
+        {smallScreen && <MenuIcon/>}
+        </div>
         <Link to="/">
           <img src={logoSVG} alt="logo" className="p-1" />
           {/* <h1 id="name">BEYOUNG</h1> */}
         </Link>
-        <nav className="flex w-4/12 items-center  my-auto h-full flex-nowrap justify-between list-none">
+        {smallScreen ? (menuToggle ? <SidePannel handleMenuToggle={handleMenuToggle} /> :'') : <nav className="flex w-4/12 items-center  my-auto h-full flex-nowrap justify-between list-none">
           <NavLink
             className="font-bold  cursor-pointer p-4 hover:bg-yellow-500 "
             onMouseEnter={() => setIsDropMenuVisible(true)}
@@ -175,9 +186,10 @@ const DualNavBar = () => {
           >
             Joggers
           </NavLink>
-        </nav>
+        </nav>}
+        
 
-        <div className="flex w-2/12 justify-between items-center">
+        <div className={smallScreen ? 'flex items-center gap-4':"flex w-2/12 justify-between items-center"}>
           <div className="cursor-pointer" onClick={handleSearchClick}>
             <SearchIcon />
           </div>
@@ -238,13 +250,14 @@ const DropDownMenu = ({ data }) => {
 const SearchBar = () => {
   const inputValue = useRef(null);
   const navigate = useNavigate();
+  const smallScreen=useMediaQuery('(max-width:650px)');
   const handleSearchClick = () => {
     const inputValueValue = inputValue.current.value;
     navigate(`/search/${inputValueValue}`);
   };
 
   return (
-    <div className="absolute w-96 p-3 flex flex-nowrap justify-between bg-white right-6 top-24 z-10">
+    <div className={`absolute w-96 p-3 flex flex-nowrap justify-between bg-white right-6 ${smallScreen ? 'top-32':'top-24'} z-10`}>
       <input
         type="text"
         ref={inputValue}

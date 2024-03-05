@@ -4,6 +4,36 @@
 
 
 
+@media screeen and (max-width:800px){
+
+  .men-mobile{
+    /* display: flex;
+    flex-direction: column; */
+    background-color: aqua;
+  
+  }
+}
+
+/* .men-mobile{ */
+  /* display: flex;
+  flex-direction: column; */
+  /* background-color: aqua; */
+/* } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * {
   margin: 0;
   padding: 0;

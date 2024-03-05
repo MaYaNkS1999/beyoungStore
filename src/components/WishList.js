@@ -5,12 +5,14 @@ import { baseUrl } from "../utils/constant";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setWishlistDummy } from "../utils/redux/cartSlice";
+import {useMediaQuery} from '@mui/material';
 
 const WishList = () => {
   const [products, setProducts] = useState([]);
   const token = window.localStorage.getItem("token");
   const wishlistDummy=useSelector(store=>store.cart.wishlistDummy);
   const dispatch=useDispatch();
+  const smallScreen=useMediaQuery('(max-width:650px)');
 
   const clearAllWishlist =async () => {
     const apiUrl=baseUrl+"/api/v1/ecommerce/wishlist";
@@ -59,7 +61,7 @@ const WishList = () => {
       )}
       {products.length === 0 ? (
         <img
-          style={{ width: "70%", margin: "0 auto" }}
+          style={smallScreen?{marginTop:'50%'}:{ width: "70%", margin: "0 auto" }}
           src={emptyImage}
           alt="empty-wishlist"
         />

@@ -35,9 +35,9 @@ const Card = ({ item }) => {
   };
 
   return (
-    <div className="w-2/12 border p-2">
+    <div className="w-[300px] mb-2">
       <Link to={"/product/" + item._id}>
-        <img src={item.displayImage} alt="image" className="w-full" />
+        <img src={item.displayImage} alt="image" className="w-full rounded-lg" />
       </Link>
       <div className="flex justify-between">
         <Link to={"/product/" + item._id}>

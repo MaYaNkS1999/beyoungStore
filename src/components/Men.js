@@ -12,7 +12,7 @@ const Men = () => {
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight - 100) {
+    if (scrollTop + clientHeight >= scrollHeight - 1000) {
       fetchData();
     }
   }, 200);
@@ -47,7 +47,7 @@ const Men = () => {
   };
 
   return (
-    <div className="w-10/12 m-auto">
+    <div className="w-10/12 m-auto ">
       <div className="w-full text-3xl my-4">
         <h1 className="">MEN</h1>
       </div>

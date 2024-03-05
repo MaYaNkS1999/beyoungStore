@@ -53,7 +53,7 @@ const WishlistCard = ({ product }) => {
   
   
   return (
-    <div className="relative w-3/12">
+    <div className="relative w-[200px]">
       <Link to={`/product/${_id}`}>
         <img
           src={displayImage}

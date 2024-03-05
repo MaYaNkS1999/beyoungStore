@@ -2,9 +2,11 @@ import React,{useEffect, useState} from 'react';
 import { Button, Grid, TextField } from "@mui/material";
 import { useDispatch } from 'react-redux';
 import {setButtonDisable} from "../../utils/redux/checkoutSlice";
+import {useMediaQuery} from '@mui/material';
 
 const CheckoutAddress = () => {
   const dispatch=useDispatch();
+  const smallScreen=useMediaQuery('(max-width:650px)');
   
     const [address, setAddress] = useState({
         name: "",
@@ -44,10 +46,12 @@ const CheckoutAddress = () => {
         e.preventDefault();
         setDisableForm(!disableForm);
         disableForm ? dispatch(setButtonDisable(true)):dispatch(setButtonDisable(false));
+        window.localStorage.setItem("Address", JSON.stringify(address));
+        console.log(address);
       }
   return (
     <>
-      <section className="bg-white ml-2 p-2 rounded-lg">
+      <section className={`bg-white ${smallScreen?'mx-2 mb-2':'ml-2'}  p-2 rounded-lg`}>
         <form onSubmit={handleFormSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

@@ -8,6 +8,7 @@ import {setIsProfile,setIsWishList,setIsOrder} from "../utils/redux/accountSlice
 import { toast } from "react-toastify";
 import { setShowDeleteDialogue } from '../utils/redux/accountSlice';
 import DeleteMeDialoge from './DeleteMeDialoge';
+import {useMediaQuery} from '@mui/material';
 
 
 const MyAccount = () => {
@@ -20,7 +21,7 @@ const MyAccount = () => {
   const isOrder=useSelector(store=>store.account.isOrder);
     const isLogin=useSelector((store)=>store.auth.isLogin);
     const showDeleteDialogue=useSelector(store=>store.account.showDeleteDialogue)
-
+    const smallScreen=useMediaQuery('(max-width:650px)');
     const dispatch=useDispatch();
 
     const handleLogout=()=>{
@@ -59,8 +60,8 @@ const MyAccount = () => {
   return (
     <div className='w-10/12 m-auto my-10'>
 
-       <div className='flex gap-16 items-start'>
-        <div className='flex w-3/12 flex-col gap-3 border border-gray-400 rounded-lg'>
+       <div className={`flex ${smallScreen?'gap-2':'gap-16'} items-start`}>
+        <div className={`flex ${smallScreen?'w-5/12':'w-3/12'} flex-col gap-3 border border-gray-400 rounded-lg`}>
         <Stack
             // sx={{ margin: "1rem" }}
             alignItems="center"

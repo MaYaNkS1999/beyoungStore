@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { setIsClearcart } from "../../utils/redux/checkoutSlice";
 import { setButtonDisable } from "../../utils/redux/checkoutSlice";
 import { setCartDummy } from "../../utils/redux/cartSlice";
+import {useMediaQuery} from '@mui/material';
 
 const CartComponent = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const CartComponent = () => {
   );
   const dispatch = useDispatch();
   const cartDummy=useSelector(store=>store.cart.cartDummy);
+  const smallScreen=useMediaQuery('(max-width:650px)');
   
   
   const fetchData = async () => {
@@ -39,6 +41,7 @@ const CartComponent = () => {
     });
     const jsonData = await response.json();
     setProducts(jsonData.data?.items);
+    // console.log(products);
     setData(jsonData.data);
   };
   
@@ -53,9 +56,39 @@ const CartComponent = () => {
       navigate("/cart/payment");
     }
     if (query === "payment") { 
+      const address=JSON.parse(window.localStorage.getItem("Address"));
+  // console.log(address);
+      products.map((item)=>{orderHistory(item,address)});
       navigate("/cart/success");
     }
   };
+
+  const orderHistory=async(item,address)=>{
+    const productId=item.product._id;
+    const apiUrl=baseUrl+`/api/v1/ecommerce/order`;
+    const response=await fetch(apiUrl,{
+      method:'POST',
+      headers:{
+        authorization: `Bearer ${token}`,
+        projectId: "fio1831j50s3",
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        "productId":`${productId}`,
+        "quantity":1,
+        "addressType":"HOME",
+        "address":{
+          "street":`${address.street}`,
+          "city":`${address.city}`,
+          "state":`${address.state}`,
+          "country":`${address.country}`,
+          "zipCode":`${address.zipCode}`
+        }
+      })
+    })
+    const jsonData=await response.json();
+    console.log(jsonData);
+  }
   
   const clearWholeCart = async () => {
     const apiUrl = baseUrl + `/api/v1/ecommerce/cart`;
@@ -90,9 +123,9 @@ const CartComponent = () => {
         <EmptyCart />
       ) : (
         <>
-          <div className="w-10/12 m-auto flex justify-between bg-gray-300 items-start">
+          <div className={`w-10/12 m-auto flex ${smallScreen && 'flex-col'} justify-between bg-gray-300 items-start`}>
             <Outlet />
-            <div className="w-5/12 p-2 bg-white mx-4">
+            <div className={`${smallScreen ?'mb-2 mx-2 w-[96%]':'w-5/12  mx-4'} p-2 bg-white`}>
               <section className="pricing-section">
                 <h4 className="font-bold text-2xl mb-2">
                   PRICE DETAILS
@@ -127,7 +160,7 @@ const CartComponent = () => {
                     onClick={handleCheckout}
                     className="font-bold text-2xl text-white bg-sky-300 p-3 w-10/12 mx-auto my-2"
                   >
-                    CHECKOUT SECURELY
+                    {query !== "payment" ? "CHECKOUT SECURELY":"PLACE ORDER"}
                   </button>
                   <button
                     disabled={isClearcartDisable}

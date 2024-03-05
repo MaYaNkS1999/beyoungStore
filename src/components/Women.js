@@ -12,7 +12,7 @@ const Men=()=>{
         const scrollHeight = document.documentElement.scrollHeight;
         const clientHeight = document.documentElement.clientHeight;
     
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
+        if (scrollTop + clientHeight >= scrollHeight - 1000) {
           fetchData();
         }
       }, 200);
