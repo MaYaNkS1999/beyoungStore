@@ -141,7 +141,7 @@ const MyProfile = () => {
         {username
           .split(" ")
           .map((word) => word[0].toUpperCase())
-          .join(" ")}
+          .join(" ")} 
       </Avatar>
       <Grid sx={{ margin: "2rem 4rem",width:"100%" }} container spacing={2}>
         <Grid item xs={12}>

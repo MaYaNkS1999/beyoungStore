@@ -56,13 +56,14 @@ const Login = () => {
       body: JSON.stringify(userInfo),
     });
     const jsonData = await response.json();
+    console.log(jsonData);
     if (response.ok) {
       // Navigate to a different route
       toast.success("Login Successfully");
       dispatch(setIsLogin(true));
       dispatch(setIsLoginPopup(false));
       // dispatch(setIsSignupPopup)
-      dispatch(addUserDetails(jsonData.data));
+      dispatch(addUserDetails(jsonData.data.user));
       dispatch(setToken(jsonData.token));
       navigate("/", { replace: true });
     } else {

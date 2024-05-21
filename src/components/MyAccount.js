@@ -13,7 +13,7 @@ import {useMediaQuery} from '@mui/material';
 
 const MyAccount = () => {
   const userInfo=JSON.parse(window.localStorage.getItem("userInfo"));
-  const {name}=userInfo;
+  const {name}=userInfo?userInfo:"User";
   // console.log(userInfo.user);
   const navigate=useNavigate();
   const isProfile=useSelector((store)=>store.account.isProfile);
@@ -72,10 +72,10 @@ const MyAccount = () => {
             <Avatar
               sx={{ height: "100px", width: "100px", background: "black" }}
             >
-              {name
+              {/*name
                 .split(" ")
                 .map((word) => word[0].toUpperCase())
-                .join(" ")}
+  .join(" ")*/}
             </Avatar>
             <Typography sx={{ textTransform: "uppercase" }} variant="h5">
               {name}
