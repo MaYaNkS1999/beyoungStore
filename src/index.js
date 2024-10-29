@@ -6,11 +6,4 @@ import { RouterProvider } from "react-router-dom";
 import { appRouter } from "./components/App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<RouterProvider router={appRouter}/>);
-
-
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
+root.render(<RouterProvider router={appRouter} />);
